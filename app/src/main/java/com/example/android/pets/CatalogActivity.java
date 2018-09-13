@@ -48,6 +48,12 @@ public class CatalogActivity extends AppCompatActivity {
         displayDatabaseInfo();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        displayDatabaseInfo();
+    }
+
     /**
      * Temporary helper method to display information in the onscreen TextView about the state of
      * the pets database.
@@ -75,6 +81,9 @@ public class CatalogActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Helper method to insert hardcoded pet data into the database. For debugging purposes only.
+     */
     private void insertPet() {
         // Gets the database in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
