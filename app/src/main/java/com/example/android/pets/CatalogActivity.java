@@ -59,13 +59,6 @@ public class CatalogActivity extends AppCompatActivity {
      * the pets database.
      */
     private void displayDatabaseInfo() {
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-        PetDbHelper mDbHelper = new PetDbHelper(this);
-
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
         // Define a projection that specifies which columns from the database
         String[] projection = {
                 PetEntry._ID,
@@ -80,6 +73,7 @@ public class CatalogActivity extends AppCompatActivity {
         // Perform this raw SQL query "SELECT * FROM pets"
         // to get a Cursor that contains all rows from the pets table.
         //Cursor cursor = db.rawQuery("SELECT * FROM " + PetEntry.TABLE_NAME, null);
+
         Cursor cursor = db.query(
                 PetEntry.TABLE_NAME,
                 projection,
@@ -88,6 +82,8 @@ public class CatalogActivity extends AppCompatActivity {
                 null,
                 null,
                 null);
+
+
 
         TextView displayView = (TextView) findViewById(R.id.text_view_pet);
 
