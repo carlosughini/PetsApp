@@ -104,7 +104,8 @@ public class CatalogActivity extends AppCompatActivity {
                     PetEntry.COLUMN_PET_NAME + " - " +
                     PetEntry.COLUMN_PET_BREED + " - " +
                     PetEntry.COLUMN_PET_GENDER + " - " +
-                    PetEntry.COLUMN_PET_WEIGHT + " - " + "\n");
+                    PetEntry.COLUMN_PET_WEIGHT + " - " + "\n"
+            );
 
             // Figure out the index of each column
             int idColumnIndex = cursor.getColumnIndex(PetEntry._ID);
