@@ -148,7 +148,7 @@ public class EditorActivity extends AppCompatActivity {
         // there are no values).
         // The third argument is the ContentValues object containing the info for Toto.
         long newRowId = db.insert(PetEntry.TABLE_NAME,null,values);
-        Log.v("EditorActivity","Id: " + newRowId);
+
         if (newRowId != -1) {
             Toast.makeText(this,"Pet saved with id: " + newRowId,Toast.LENGTH_SHORT).show();
         } else {
