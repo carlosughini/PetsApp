@@ -23,9 +23,6 @@ import com.example.android.pets.data.PetDbHelper;
  */
 public class CatalogActivity extends AppCompatActivity {
 
-    /** Database helper that will provide us access to the database */
-    private PetDbHelper mDbHelper;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,11 +38,7 @@ public class CatalogActivity extends AppCompatActivity {
             }
         });
 
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-        mDbHelper = new PetDbHelper(this);
-
-        displayDatabaseInfo();
+        //displayDatabaseInfo();
     }
 
     @Override
@@ -69,27 +62,29 @@ public class CatalogActivity extends AppCompatActivity {
         };
 
 
-
         // Perform this raw SQL query "SELECT * FROM pets"
         // to get a Cursor that contains all rows from the pets table.
         //Cursor cursor = db.rawQuery("SELECT * FROM " + PetEntry.TABLE_NAME, null);
         /**
-        Cursor cursor = db.query(
-                PetEntry.TABLE_NAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                null);*/
+         Cursor cursor = db.query(
+         PetEntry.TABLE_NAME,
+         projection,
+         null,
+         null,
+         null,
+         null,
+         null);*/
 
+        /**
+         * Perform a query on the provider using the ContentResolver.
+         * Use the {@link PetEntry#CONTENT_URI} to access the pet data.
+         */
         Cursor cursor = getContentResolver().query(
-                PetEntry.CONTENT_URI, // The content URI
-                projection, // The columns to return for each row
-                null, // Selection criteria
-                null, // Selection criteria
-                null); // The sort order for returned rows
-
+                PetEntry.CONTENT_URI,   // The content URI
+                projection,             // The columns to return for each row
+                null,          // Selection criteria
+                null,      // Selection criteria
+                null);       // The sort order for returned rows
 
 
         TextView displayView = (TextView) findViewById(R.id.text_view_pet);
@@ -145,15 +140,15 @@ public class CatalogActivity extends AppCompatActivity {
      */
     private void insertPet() {
         // Gets the database in write mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        //SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
         // Create a ContentValues object where column names are the keys,
         // and Toto's pet attributes are the values.
         ContentValues values = new ContentValues();
-        values.put(PetEntry.COLUMN_PET_NAME,"Toto");
-        values.put(PetEntry.COLUMN_PET_BREED,"Terrier");
-        values.put(PetEntry.COLUMN_PET_GENDER,PetEntry.GENDER_MALE);
-        values.put(PetEntry.COLUMN_PET_WEIGHT,7);
+        values.put(PetEntry.COLUMN_PET_NAME, "Toto");
+        values.put(PetEntry.COLUMN_PET_BREED, "Terrier");
+        values.put(PetEntry.COLUMN_PET_GENDER, PetEntry.GENDER_MALE);
+        values.put(PetEntry.COLUMN_PET_WEIGHT, 7);
 
         // Insert a new row for Toto in the database, returning the ID of that new row.
         // The first argument for db.insert() is the pets table name.
@@ -162,8 +157,8 @@ public class CatalogActivity extends AppCompatActivity {
         // this is set to "null", then the framework will not insert a row when
         // there are no values).
         // The third argument is the ContentValues object containing the info for Toto.
-        long newRowId = db.insert(PetEntry.TABLE_NAME,null,values);
-        Log.v("CatalogActivity","Result: " + newRowId);
+        //long newRowId = db.insert(PetEntry.TABLE_NAME, null, values);
+        //Log.v("CatalogActivity", "Result: " + newRowId);
         displayDatabaseInfo();
 
     }

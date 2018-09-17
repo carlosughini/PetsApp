@@ -42,9 +42,32 @@ public final class PetContract {
         public static final String TABLE_NAME = "pets";
 
         public static final String _ID = BaseColumns._ID;
+        /**
+         * Name of the pet.
+         *
+         * Type: TEXT
+         */
         public static final String COLUMN_PET_NAME = "name";
+
+        /**
+         * Gender of the pet.
+         *
+         * Type: INTEGER
+         */
         public static final String COLUMN_PET_GENDER = "gender";
+
+        /**
+         * Breed of the pet.
+         *
+         * Type: TEXT
+         */
         public static final String COLUMN_PET_BREED = "breed";
+
+        /**
+         * Weight of the pet.
+         *
+         * Type: INTEGER
+         */
         public static final String COLUMN_PET_WEIGHT = "weight";
 
         public static final int GENDER_UNKNOWN = 0;
