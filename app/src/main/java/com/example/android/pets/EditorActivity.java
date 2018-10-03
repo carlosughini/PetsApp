@@ -16,13 +16,11 @@
 package com.example.android.pets;
 
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +31,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.android.pets.data.PetContract.PetEntry;
-import com.example.android.pets.data.PetDbHelper;
 
 /**
  * Allows user to create a new pet or edit an existing one.
@@ -51,9 +48,6 @@ public class EditorActivity extends AppCompatActivity {
 
     /** EditText field to enter the pet's gender */
     private Spinner mGenderSpinner;
-
-    /** Database helper that will provide us access to the database */
-    private SQLiteOpenHelper mDbHelper;
 
     /**
      * Gender of the pet. The possible values are:
@@ -73,10 +67,6 @@ public class EditorActivity extends AppCompatActivity {
         mGenderSpinner = (Spinner) findViewById(R.id.spinner_gender);
 
         setupSpinner();
-
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-        mDbHelper = new PetDbHelper(this);
     }
 
     /**
@@ -129,9 +119,6 @@ public class EditorActivity extends AppCompatActivity {
         String weightString = mWeightEditText.getText().toString().trim();
         int weight = Integer.parseInt(weightString);
 
-        // Gets the database in write mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
         // Create a ContentValues object where column names are the keys,
         // and Toto's pet attributes are the values.
         ContentValues values = new ContentValues();
@@ -147,12 +134,18 @@ public class EditorActivity extends AppCompatActivity {
         // this is set to "null", then the framework will not insert a row when
         // there are no values).
         // The third argument is the ContentValues object containing the info for Toto.
-        long newRowId = db.insert(PetEntry.TABLE_NAME,null,values);
+        //long newRowId = db.insert(PetEntry.TABLE_NAME,null,values);
 
-        if (newRowId != -1) {
-            Toast.makeText(this,"Pet saved with id: " + newRowId,Toast.LENGTH_SHORT).show();
+        Uri newUri = getContentResolver().insert(
+                PetEntry.CONTENT_URI,
+                values);
+
+        if (newUri == null) {
+            Toast.makeText(this, getString(R.string.toast_pet_error),
+                    Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this,"Error with saving pet",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toast_pet_saved),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
