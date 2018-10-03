@@ -64,4 +64,10 @@
 
     <!--Text to show when we have an error saving pet-->
     <string name="toast_pet_error">Error with saving pet</string>
+
+    <!-- Texto do título para a view vazia, que descreve a imagem vazia da casa de cachorro [CHAR LIMIT=50] -->
+    <string name="empty_view_title_text">It\'s a bit lonely here...</string>
+
+    <!-- Texto de legenda para a view vazia, que solicita que o usuário adicione um pet [CHAR LIMIT=50] -->
+    <string name="empty_view_subtitle_text">Get started by adding a pet</string>
 </resources>
