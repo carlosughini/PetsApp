@@ -60,6 +60,21 @@ public class EditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
+        // Exame the intent
+        Uri petUri = getIntent().getData();
+
+        /*
+        * If the Intent does not contain a pet content URI, then we know that we are
+        * creating a new pet.
+         */
+        if (petUri != null) {
+            // This is an existing pet, so change app bar to say "Edit pet"
+            this.setTitle(getString(R.string.editor_activity_title_edit_pet));
+        } else {
+            // This is a new pet, so change app bar to say "Add a pet"
+            this.setTitle(getString(R.string.editor_activity_title_add_pet));
+        }
+
         // Find all relevant views that we will need to read user input from
         mNameEditText = (EditText) findViewById(R.id.edit_pet_name);
         mBreedEditText = (EditText) findViewById(R.id.edit_pet_breed);
