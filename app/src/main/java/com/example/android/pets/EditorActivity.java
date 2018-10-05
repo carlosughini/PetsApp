@@ -232,7 +232,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
-                // Do nothing for now
+                // Show a dialog for the user chose between delete or not the pet
+                showDeleteConfirmationDialog();
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
@@ -285,26 +286,25 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 
         // Move the cursor for the first position
-        cursor.moveToPosition(0);
+        if (cursor.moveToFirst()) {
+            // Get the columns index
+            int nameColumnIndex = cursor.getColumnIndex(PetEntry.COLUMN_PET_NAME);
+            int breedColumnIndex = cursor.getColumnIndex(PetEntry.COLUMN_PET_BREED);
+            int weightColumnIndex = cursor.getColumnIndex(PetEntry.COLUMN_PET_WEIGHT);
+            int genderColumnIndex = cursor.getColumnIndex(PetEntry.COLUMN_PET_GENDER);
 
-        // Get the columns index
-        int nameColumnIndex = cursor.getColumnIndex(PetEntry.COLUMN_PET_NAME);
-        int breedColumnIndex = cursor.getColumnIndex(PetEntry.COLUMN_PET_BREED);
-        int weightColumnIndex = cursor.getColumnIndex(PetEntry.COLUMN_PET_WEIGHT);
-        int genderColumnIndex = cursor.getColumnIndex(PetEntry.COLUMN_PET_GENDER);
+            // Extract the information from the cursor
+            String petName = cursor.getString(nameColumnIndex);
+            String petBreed = cursor.getString(breedColumnIndex);
+            String petWeight = cursor.getString(weightColumnIndex);
+            int petGender = cursor.getInt(genderColumnIndex);
 
-        // Extract the information from the cursor
-        String petName = cursor.getString(nameColumnIndex);
-        String petBreed = cursor.getString(breedColumnIndex);
-        String petWeight = cursor.getString(weightColumnIndex);
-        int petGender = cursor.getInt(genderColumnIndex);
-
-        // Insert the data in the edit text
-        mNameEditText.setText(petName);
-        mBreedEditText.setText(petBreed);
-        mWeightEditText.setText(petWeight);
-        mGenderSpinner.setSelection(petGender);
-
+            // Insert the data in the edit text
+            mNameEditText.setText(petName);
+            mBreedEditText.setText(petBreed);
+            mWeightEditText.setText(petWeight);
+            mGenderSpinner.setSelection(petGender);
+        }
     }
 
     @Override
@@ -376,6 +376,56 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             menuItem.setVisible(false);
         }
         return true;
+    }
+
+    private void showDeleteConfirmationDialog() {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the postivie and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_dialog_msg);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Delete" button, so delete the pet.
+                deletePet();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Cancel" button, so dismiss the dialog
+                // and continue editing the pet.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    /**
+     * Perform the deletion of the pet in the database.
+     */
+    private void deletePet() {
+        // COMPLETED: Implement this method
+        // Only perform the delete if this is an existing pet
+        if (petUri != null) {
+            // Call the Content Resolver to delete the pet at the given content URI.
+            // Pass in null for the selection and selection args because the petUri
+            // content URI already identifies the pet that we want
+            int rowsDeleted = getContentResolver().delete(petUri,null,null);
+
+            // Show a Toast message depending on whether or not the delete was successfull
+            if (rowsDeleted > 0) {
+                Toast.makeText(this, getString(R.string.editor_delete_pet_successful),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, getString(R.string.editor_delete_pet_failed),
+                        Toast.LENGTH_SHORT).show();
+            }
+            finish();
+        }
     }
 
 
